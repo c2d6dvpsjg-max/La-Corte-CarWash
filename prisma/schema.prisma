@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Usuario para login
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin") // admin, empleado
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Trabajadores del lavadero
+model Worker {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  salary    Float    @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  jobs      Job[]
+  payments  Payment[]
+}
+
+// Servicios que ofrece el lavadero
+model Service {
+  id          String   @id @default(cuid())
+  name        String   // Basico, Detallado, Encerado, Porcelanizado Completo
+  description String?
+  price       Float
+  duration    Int?     // Duración en minutos
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  jobs        Job[]
+}
+
+// Trabajos realizados (registro de servicios hechos)
+model Job {
+  id          String   @id @default(cuid())
+  serviceId   String
+  service     Service  @relation(fields: [serviceId], references: [id])
+  workerId    String?
+  worker      Worker?  @relation(fields: [workerId], references: [id])
+  vehicleType String?  // Sedan, SUV, Camioneta, etc.
+  vehiclePlate String?
+  customerName String?
+  customerPhone String?
+  price       Float    // Precio cobrado (puede variar del precio base)
+  status      String   @default("completado") // completado, pendiente, cancelado
+  notes       String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Ingresos (además de los trabajos)
+model Income {
+  id          String   @id @default(cuid())
+  description String
+  amount      Float
+  category    String   @default("otro") // trabajo, propina, otro
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Gastos del negocio
+model Expense {
+  id          String   @id @default(cuid())
+  description String
+  amount      Float
+  category    String   // productos, servicios, salarios, mantenimiento, otro
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Pagos a trabajadores
+model Payment {
+  id          String   @id @default(cuid())
+  workerId    String
+  worker      Worker   @relation(fields: [workerId], references: [id])
+  amount      Float
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
