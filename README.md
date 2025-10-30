@@ -1,9 +1,10 @@
 # La Corte CarWash - Sistema de Gestión
 
-Sistema interno de gestión para lavadero de autos. Permite llevar control de gastos, ingresos, trabajadores, servicios y trabajos realizados.
+Sistema completo de gestión para lavadero de autos con aplicación web y móvil. Permite llevar control de gastos, ingresos, trabajadores, servicios y trabajos realizados desde cualquier dispositivo.
 
 ## Características
 
+### Aplicación Web
 - **Dashboard** con estadísticas en tiempo real
 - **Gestión de Servicios** (Básico, Detallado, Encerado, Porcelanizado)
 - **Gestión de Trabajadores** y seguimiento de pagos
@@ -14,8 +15,17 @@ Sistema interno de gestión para lavadero de autos. Permite llevar control de ga
 - **Base de datos PostgreSQL** con Prisma ORM
 - **Interfaz moderna** con TailwindCSS
 
+### Aplicación Móvil (iOS & Android)
+- **App nativa** construida con React Native y Expo
+- **Sincronización en tiempo real** con el servidor
+- **Gestión completa** de trabajos, ingresos, gastos y trabajadores
+- **Dashboard móvil** con estadísticas actualizadas
+- **Interfaz intuitiva** optimizada para móvil
+- **Disponible para iPhone y Android**
+
 ## Tecnologías
 
+### Backend & Web
 - Next.js 14 (App Router)
 - TypeScript
 - Prisma ORM
@@ -23,6 +33,14 @@ Sistema interno de gestión para lavadero de autos. Permite llevar control de ga
 - NextAuth.js
 - TailwindCSS
 - date-fns
+
+### Aplicación Móvil
+- React Native
+- Expo
+- TypeScript
+- React Native Paper
+- Expo Router
+- Axios
 
 ## Requisitos Previos
 
@@ -152,13 +170,38 @@ npm run db:studio    # Abrir Prisma Studio (visualizador de BD)
 4. Sigue las instrucciones para configurar los registros DNS
 5. Actualiza `NEXTAUTH_URL` en las variables de entorno
 
+## Aplicación Móvil
+
+La aplicación móvil está ubicada en el directorio `mobile-app/`. Para instrucciones detalladas de instalación y uso, consulta [mobile-app/README.md](mobile-app/README.md).
+
+### Inicio Rápido - App Móvil
+
+```bash
+# Navegar a la app móvil
+cd mobile-app
+
+# Instalar dependencias
+npm install
+
+# Configurar variables de entorno
+cp .env.example .env
+# Edita .env y configura la URL de tu API
+
+# Iniciar la app
+npm start
+```
+
+Escanea el código QR con Expo Go (iOS/Android) para ver la app en tu dispositivo.
+
 ## Estructura del Proyecto
 
 ```
 La-Corte-CarWash/
-├── app/                    # App Router de Next.js
+├── app/                    # App Router de Next.js (Web)
 │   ├── api/               # API Routes
 │   │   ├── auth/         # Autenticación
+│   │   │   └── mobile/   # Endpoint para app móvil
+│   │   ├── dashboard/    # Estadísticas
 │   │   ├── services/     # CRUD Servicios
 │   │   ├── workers/      # CRUD Trabajadores
 │   │   ├── jobs/         # CRUD Trabajos
@@ -171,10 +214,20 @@ La-Corte-CarWash/
 │   ├── ingresos/         # Gestión de ingresos
 │   ├── gastos/           # Gestión de gastos
 │   └── login/            # Página de login
-├── components/           # Componentes reutilizables
+├── mobile-app/            # Aplicación Móvil (React Native)
+│   ├── app/              # Rutas (Expo Router)
+│   │   ├── (tabs)/      # Navegación por pestañas
+│   │   └── login.tsx    # Login móvil
+│   ├── src/             # Código fuente
+│   │   ├── components/  # Componentes UI
+│   │   ├── contexts/    # Contextos (Auth)
+│   │   ├── services/    # API Services
+│   │   └── types/       # Tipos TypeScript
+│   └── assets/          # Recursos (iconos, imágenes)
+├── components/           # Componentes web reutilizables
 ├── lib/                  # Utilidades y configuración
 ├── prisma/              # Schema y migraciones
-└── types/               # Tipos de TypeScript
+└── types/               # Tipos de TypeScript compartidos
 ```
 
 ## Modelos de Base de Datos
